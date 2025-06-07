@@ -1,0 +1,33 @@
+services:
+
+  hardhat:
+    build: ./images/hardhat
+    volumes:
+      - ./configs/hardhat/hardhat.config.js:/usr/src/app/hardhat.config.js
+    environment:
+      NODE_ENV: production
+    healthcheck:
+      test: ["CMD", "healthcheck-bash.sh", "8545"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    ports:
+      - 18545:8545
+
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:stable
+    volumes:
+      - ./healthchecks/healthcheck-bash.sh:/usr/local/bin/healthcheck-bash.sh
+    command: anvil --gas-price 0
+    healthcheck:
+      test: ["CMD", "healthcheck-bash.sh"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+    ports:
+      - 28545:8545
+
+  # evmone:
+
