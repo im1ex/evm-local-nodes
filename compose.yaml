@@ -4,10 +4,11 @@ services:
     build: ./images/hardhat
     volumes:
       - ./configs/hardhat/hardhat.config.js:/usr/src/app/hardhat.config.js
+      - ./healthchecks/healthcheck-node.js:/usr/src/app/healthcheck-node.js
     environment:
       NODE_ENV: production
     healthcheck:
-      test: ["CMD", "healthcheck-bash.sh", "8545"]
+      test: ["CMD", "node", "healthcheck-node.js"]
       interval: 3s
       timeout: 3s
       retries: 20
